@@ -649,6 +649,12 @@ button {
   color: var(--muted);
 }
 
+.offer-list {
+  margin: 16px 0 0;
+  padding-left: 18px;
+  color: var(--muted);
+}
+
 .cta-block {
   margin-top: 24px;
   display: grid;
