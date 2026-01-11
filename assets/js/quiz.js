@@ -63,6 +63,7 @@
       revealToggle.disabled = stage !== "question";
       revealToggle.hidden = stage !== "question";
     }
+    document.body.classList.toggle("quiz-busy", stage !== "question");
   };
 
   const showResult = () => {

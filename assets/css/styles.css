@@ -27,6 +27,24 @@ body {
   line-height: 1.6;
 }
 
+body.quiz-busy .site-footer {
+  margin-top: 0;
+}
+
+body.quiz-busy main#conteudo {
+  padding-bottom: 70vh;
+}
+
+body.quiz-busy .quiz-shell {
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+}
+
+body.quiz-busy .quiz-card {
+  width: 100%;
+}
+
 body::before {
   content: "";
   position: fixed;
@@ -389,6 +407,7 @@ button {
   border: 1px solid var(--line);
   background: #ffffff;
   font-weight: 600;
+  font-size: 1rem;
   color: var(--ink);
   cursor: pointer;
   transition: border-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
