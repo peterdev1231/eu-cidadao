@@ -4,12 +4,12 @@
 
   const questions = [
     {
-      text: "Você já conferiu se atende aos requisitos mínimos do seu estado?",
-      options: ["Sim", "Não", "Não sei"]
+      text: "Para iniciarmos a verificação de elegibilidade legal, você tem mais de 18 anos?",
+      options: ["Sim", "Não"]
     },
     {
-      text: "Existe algum impedimento legal conhecido no seu caso?",
-      options: ["Não", "Sim", "Não sei"]
+      text: "Você já tentou tirar o porte antes, sozinho ou com auxílio de profissionais como advogados ou despachantes?",
+      options: ["Sim", "Não"]
     },
     {
       text: "Sua documentação básica está organizada?",
@@ -21,6 +21,8 @@
   const optionsEl = quizRoot.querySelector("[data-options]");
   const progressText = quizRoot.querySelector("[data-progress-text]");
   const progressBar = quizRoot.querySelector("[data-progress-bar]");
+  const progressWrap = quizRoot.querySelector(".quiz-progress");
+  const stageStart = quizRoot.querySelector('[data-stage="start"]');
   const stageQuestion = quizRoot.querySelector('[data-stage="question"]');
   const stageAnalyzing = quizRoot.querySelector('[data-stage="analyzing"]');
   const stageResult = quizRoot.querySelector('[data-stage="result"]');
@@ -28,6 +30,7 @@
   const analysisBar = quizRoot.querySelector(".analysis-bar span");
   const analysisPercent = quizRoot.querySelector("[data-analysis-percent]");
   const revealToggle = document.querySelector("[data-reveal-toggle]");
+  const startButton = quizRoot.querySelector("[data-quiz-start]");
 
   const total = questions.length;
   let currentIndex = 0;
@@ -56,14 +59,22 @@
   };
 
   const setStage = (stage) => {
+    if (stageStart) {
+      stageStart.hidden = stage !== "start";
+    }
     stageQuestion.hidden = stage !== "question";
     stageAnalyzing.hidden = stage !== "analyzing";
     stageResult.hidden = stage !== "result";
-    if (revealToggle) {
-      revealToggle.disabled = stage !== "question";
-      revealToggle.hidden = stage !== "question";
+    if (progressWrap) {
+      progressWrap.hidden = stage === "start";
     }
-    document.body.classList.toggle("quiz-busy", stage !== "question");
+    if (revealToggle) {
+      const isHiddenStage = stage === "analyzing" || stage === "result";
+      revealToggle.disabled = isHiddenStage;
+      revealToggle.hidden = isHiddenStage;
+    }
+    document.body.classList.toggle("quiz-busy", stage === "analyzing" || stage === "result");
+    document.body.classList.toggle("quiz-active", stage === "question");
   };
 
   const showResult = () => {
@@ -101,6 +112,13 @@
     analysisTimer = setTimeout(showResult, ANALYSIS_DURATION_MS);
   };
 
+  if (startButton) {
+    startButton.addEventListener("click", () => {
+      setStage("question");
+      renderQuestion();
+    });
+  }
+
   optionsEl.addEventListener("click", (event) => {
     const btn = event.target.closest("button[data-option]");
     if (!btn) return;
@@ -112,7 +130,7 @@
     }
   });
 
-  renderQuestion();
+  setStage("start");
 })();
 
 (() => {
